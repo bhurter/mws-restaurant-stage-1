@@ -4,6 +4,24 @@ let restaurants,
 var map
 var markers = []
 
+
+/**
+ **  Register serviceWorker
+ **/
+
+ //make sure that Service Workers are supported.
+ if (navigator.serviceWorker) {
+     navigator.serviceWorker.register('./service-worker.js')
+         .then(function (registration) {
+             console.log(registration);
+         })
+         .catch(function (e) {
+             console.error(e);
+         })
+ } else {
+     console.log('Service Worker is not supported in this browser.');
+ }
+
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
@@ -78,9 +96,14 @@ window.initMap = () => {
   self.map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
     center: loc,
-    scrollwheel: false
+    scrollwheel: false,
   });
   updateRestaurants();
+  /* BH - add title to map iframe for accessibility */
+  google.maps.event.addListenerOnce ( map, 'tilesloaded', function() {
+    document.querySelector ('iframe').title = 'Map of Neighborhood Restaurants';
+  });
+
 }
 
 /**
@@ -141,6 +164,7 @@ createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.alt = `Picture of  ${restaurant.name}`;
   li.append(image);
 
   const name = document.createElement('h1');
