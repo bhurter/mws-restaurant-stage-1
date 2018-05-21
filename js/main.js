@@ -9,18 +9,19 @@ var markers = []
  **  Register serviceWorker
  **/
 
- //make sure that Service Workers are supported.
- if (navigator.serviceWorker) {
-     navigator.serviceWorker.register('./service-worker.js')
-         .then(function (registration) {
-             console.log(registration);
-         })
-         .catch(function (e) {
-             console.error(e);
-         })
- } else {
-     console.log('Service Worker is not supported in this browser.');
- }
+//make sure that Service Workers are supported.
+if (navigator.serviceWorker) {
+  navigator.serviceWorker.register('./service_worker.js')
+    .then(function() {
+      console.log('Registration worked');
+    })
+    .catch(function(e) {
+      console.log('Registration failed');
+      console.error(e);
+    })
+} else {
+  console.log('Service Worker is not supported in this browser.');
+}
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -93,17 +94,22 @@ window.initMap = () => {
     lat: 40.722216,
     lng: -73.987501
   };
-  self.map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: loc,
-    scrollwheel: false,
-  });
+  let myMap = document.getElementById('map');
+  if (navigator.onLine) {
+    self.map = new google.maps.Map(myMap, {
+      zoom: 12,
+      center: loc,
+      scrollwheel: false,
+    });
+    /* BH - add title to map iframe for accessibility */
+    google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
+      document.querySelector('iframe').title = 'Map of Neighborhood Restaurants';
+    });
+  } else {
+    //myMap.innerHTML = '<img id="offline-map" tabindex="0" src="/img/Offline.jpg" alt="Maps are not available while offline.  Maps copyright 2018 Google">';
+    myMap.innerHTML = '<h2 class="offline-map" tabindex = "0">Map is not available when offline';
+  }
   updateRestaurants();
-  /* BH - add title to map iframe for accessibility */
-  google.maps.event.addListenerOnce ( map, 'tilesloaded', function() {
-    document.querySelector ('iframe').title = 'Map of Neighborhood Restaurants';
-  });
-
 }
 
 /**
@@ -160,28 +166,37 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
+  li.setAttribute('aria-label', `List of neighborhood restaurants`);
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  image.alt = `Picture of  ${restaurant.name}`;
+  image.alt = restaurant.photo_description;
+  image.tabIndex = 0;
   li.append(image);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
+  name.tabIndex = 0;
+  name.setAttribute('aria-label', `Restaurant is ${restaurant.name}`);
   li.append(name);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
+  neighborhood.setAttribute('aria-label', `Neighborhood is ${restaurant.neighborhood}`);
+  neighborhood.tabIndex = 0;
   li.append(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
+  address.setAttribute('aria-label', `Address is ${restaurant.address}`);
+  address.tabIndex = 0;
   li.append(address);
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
+  more.setAttribute('aria-label', `View ${restaurant.name} Details`);
   li.append(more)
 
   return li
@@ -191,12 +206,14 @@ createRestaurantHTML = (restaurant) => {
  * Add markers for current restaurants to the map.
  */
 addMarkersToMap = (restaurants = self.restaurants) => {
-  restaurants.forEach(restaurant => {
-    // Add marker to the map
-    const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
-    google.maps.event.addListener(marker, 'click', () => {
-      window.location.href = marker.url
+  if (navigator.onLine) {
+    restaurants.forEach(restaurant => {
+      // Add marker to the map
+      const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
+      google.maps.event.addListener(marker, 'click', () => {
+        window.location.href = marker.url
+      });
+      self.markers.push(marker);
     });
-    self.markers.push(marker);
-  });
+  }
 }

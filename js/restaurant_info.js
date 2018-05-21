@@ -9,17 +9,28 @@ window.initMap = () => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+      let myMap = document.getElementById('map');
+      if (navigator.onLine) {
+        self.map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 16,
+          center: restaurant.latlng,
+          scrollwheel: false
+        });
+        /* self.map = new google.maps.Map(myMap, {
+          zoom: 16,
+          center: restaurant.latlng,
+          scrollwheel: false
+        }); */
+        DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
 
-      google.maps.event.addListenerOnce ( map, 'tilesloaded', function() {
-        document.querySelector ('iframe').title = `Picture of  ${self.restaurant.name}`;
-      });
+        google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
+          document.querySelector('iframe').title = `Map of ${self.restaurant.name} and surrounding area`;
+        });
+      } else {
+        myMap.innerHTML = '<h2 class = "offline-map"> Map is not available when offline </h2>';
+      /*  myMap.innerHTML = '<img id="offline-map" tabindex="0" src="/img/Offline.jpg" alt="Maps are not available while offline.  Maps copyright 2018 Google">';*/
+      }
+      fillBreadcrumb();
     }
   });
 }
@@ -55,17 +66,24 @@ fetchRestaurantFromURL = (callback) => {
 fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
+  name.tabIndex = 0;
+  name.setAttribute('aria-label', `Details for ${restaurant.name}`);
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
+  address.tabIndex = 0;
+  address.setAttribute('aria-label', `Address is ${restaurant.address}`);
 
   const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img'
+  image.className = 'restaurant-img';
+  image.tabIndex = 0;
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  image.alt = `Picture of  ${restaurant.name}`;
+  image.alt = restaurant.photo_description;
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
+  cuisine.tabIndex = 0;
+  cuisine.setAttribute('aria-label', `The restaurant cuisine is ${restaurant.cuisine_type}`);
 
   // fill operating hours
   if (restaurant.operating_hours) {
@@ -80,8 +98,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
+  hours.tabIndex = 0;
+  hours.setAttribute('aria-label', `Restaurant operating hours`);
   for (let key in operatingHours) {
     const row = document.createElement('tr');
+    row.tabIndex = 0;
 
     const day = document.createElement('td');
     day.innerHTML = key;
@@ -102,11 +123,15 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
+  title.tabIndex = 0;
+  title.setAttribute('aria-label', 'Resturant reviews');
   container.appendChild(title);
 
   if (!reviews) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
+    noReviews.tabIndex = 0;
+    noReviews.setAttribute('aria-label', 'No reviews yet!');
     container.appendChild(noReviews);
     return;
   }
@@ -125,21 +150,29 @@ createReviewHTML = (review) => {
   const name = document.createElement('p');
   name.innerHTML = review.name;
   name.className = 'reviews-header'
+  name.tabIndex = 0;
+  name.setAttribute('aria-label', `Review by ${review.name}`);
   li.appendChild(name);
 
   const date = document.createElement('p');
   date.innerHTML = review.date;
   date.className = 'reviews-date'
+  date.tabIndex = 0;
+  date.setAttribute('aria-label', `Reviewed on ${review.date}`);
   li.appendChild(date);
 
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
   rating.className = 'reviews-rating';
+  rating.tabIndex = 0;
+  rating.setAttribute('aria-label', `${review.name} gave a rating of ${review.rating}`);
   li.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
-  comments.className = 'reviews-comments'
+  comments.className = 'reviews-comments';
+  comments.tabIndex = 0;
+  comments.setAttribute('aria-label', `${review.name} says ${review.comments}`);
   li.appendChild(comments);
 
   return li;
@@ -148,7 +181,7 @@ createReviewHTML = (review) => {
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
-fillBreadcrumb = (restaurant=self.restaurant) => {
+fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;

@@ -37,7 +37,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 }
 #maincontent {
   background-color: #f3f3f3;
-  min-height: 100%;
+  /* min-height: 100%; */
 }
 #footer {
   background-color: #333;
@@ -111,6 +111,20 @@ nav h1 a {
   width: 100%;
   background-color: #ccc;
 }
+
+.offline-map {
+	font-size: 4em;
+	color: #01447e;
+	height: 600px;
+	vertical-align: middle;
+	/* display: table-cell; */
+	background-color: #ccc;
+	text-align: center;
+	height: 400px;
+	align-content: center;
+	align-items:  center;
+	align-self: center;
+}
 /* ====================== Restaurant Filtering ====================== */
 .filter-options {
   width: 100%;
@@ -122,22 +136,24 @@ nav h1 a {
 }
 .filter-options h2 {
   color: white;
-  font-size: 1rem;
+  font-size: 1em;
   font-weight: normal;
   line-height: 1;
-	padding: 20px 0;
+  padding: 20px 0;
   margin: 0 20px;
+  margin: 0 0 0 20px;
 }
 .filter-options select {
   background-color: white;
   border: 1px solid #fff;
   font-family: Arial,sans-serif;
-  font-size: 11pt;
+  /***font-size: 11pt;*/
   height: 35px;
   letter-spacing: 0;
-  margin: 10px;
-  padding: 0 10px;
-  width: 200px;
+  margin: 5px;
+  padding: 0 5px;
+  width: 30%;
+  font-size: .8em;
 }
 
 /* ====================== Restaurant Listing ====================== */
@@ -208,17 +224,20 @@ nav h1 a {
   z-index: 1000;
 }
 .inside #map-container {
-  background: blue none repeat scroll 0 0;
-  height: 600px;
+  background: pink none repeat scroll 0 0;
+  height: 400px;
   /*** position: fixed; */
   right: 0;
-  top: 80px;
+  /*top: 160px;  */
+  /*** top: 80px; */
   /*** width: 50%; */
 }
 .inside #map {
   background-color: #ccc;
   /*** height: 100%; */
   width: 100%;
+  height:  400px;
+  overflow:  scroll;
 }
 .inside #footer {
   bottom: 0;
