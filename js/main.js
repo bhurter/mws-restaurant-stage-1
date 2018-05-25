@@ -106,7 +106,6 @@ window.initMap = () => {
       document.querySelector('iframe').title = 'Map of Neighborhood Restaurants';
     });
   } else {
-    //myMap.innerHTML = '<img id="offline-map" tabindex="0" src="/img/Offline.jpg" alt="Maps are not available while offline.  Maps copyright 2018 Google">';
     myMap.innerHTML = '<h2 class="offline-map" tabindex = "0">Map is not available when offline';
   }
   updateRestaurants();
@@ -171,6 +170,7 @@ createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  /* BH - added detailed image description for acessibility */
   image.alt = restaurant.photo_description;
   image.tabIndex = 0;
   li.append(image);
@@ -206,6 +206,7 @@ createRestaurantHTML = (restaurant) => {
  * Add markers for current restaurants to the map.
  */
 addMarkersToMap = (restaurants = self.restaurants) => {
+  // only add markers if online
   if (navigator.onLine) {
     restaurants.forEach(restaurant => {
       // Add marker to the map

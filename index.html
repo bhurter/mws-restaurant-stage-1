@@ -12,14 +12,7 @@
   <title>Restaurant Reviews</title>
 </head>
 
-<!--
 <body>
-  <header>
-    <nav>
-      <h1><a href="/">Restaurant Reviews</a></h1>
-    </nav>
-  </header> -->
-
   <main id="maincontent">
     <header>
       <nav>
@@ -32,14 +25,14 @@
     <section id="restaurant-information">
       <div class="filter-options" id="filter-results-by">
         <h2 aria-label="Filter Results ">Filter Results</h2>
-        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label = "Filter by Neighborhood">
+        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Filter by Neighborhood">
           <option value="all">All Neighborhoods</option>
         </select>
         <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Filter by Cuisine">
           <option value="all">All Cuisines</option>
         </select>
       </div>
-      <ul id="restaurants-list" aria-label = "restaurant list"></ul>
+      <ul id="restaurants-list" aria-label="restaurant list"></ul>
     </section>
   </main>
 

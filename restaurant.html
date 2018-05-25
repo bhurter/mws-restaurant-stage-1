@@ -4,58 +4,66 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <!-- Add viewport to support responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <!-- Main CSS file -->
   <link rel="stylesheet" href="css/styles.css" type="text/css">
   <title>Restaurant Info</title>
 </head>
 
 <body class="inside">
+  <!-- Header - Contains title and breadcrumbs -->
   <header>
+    <!-- Title -->
     <nav>
       <h1><a href="/">Restaurant Reviews</a></h1>
     </nav>
+    <!-- Breadcrumb -->
     <ul id="breadcrumb" aria-label="Breadcrumb">
       <li><a href="/">Home</a></li>
     </ul>
   </header>
+
+  <!-- Main Content -->
   <main id="maincontent">
+    <!-- Map -->
     <section id="map-container" aria-label="Map of restaurant and surrounding area">
+      <!-- filled by google maps when online.  Use service worker to handle offline -->
       <div id="map"></div>
     </section>
+    <!-- Restaurant details -->
     <section id="restaurant-container">
       <h1 id="restaurant-name"></h1>
+      <!-- put image in separate div to handle responsive -->
       <div id="restaurant-pic">
         <img id="restaurant-img">
-      </div>  
+      </div>
+      <!-- put restaurant details in separate div for responsive -->
       <div id=restaurant-details>
         <p id="restaurant-cuisine"></p>
         <p id="restaurant-address"></p>
         <table id="restaurant-hours"></table>
       </div>
     </section>
+    <!-- Reviews -->
     <section id="reviews-container">
       <ul id="reviews-list"></ul>
     </section>
   </main>
   <!-- End main -->
 
-  <!-- Beginning footer -->
+  <!-- Footer -->
   <footer id="footer">
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
   </footer>
-  <!-- End footer -->
 
-  <!-- Beginning scripts -->
+  <!-- Scripts -->
   <!-- Database helpers -->
   <script type="text/javascript" src="js/dbhelper.js"></script>
   <!-- Main javascript file -->
   <script type="text/javascript" src="js/restaurant_info.js"></script>
   <!-- Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXDhggUw7LIUpJsXAZQHSwRYI9XRDH4P0&libraries=places&callback=initMap"></script>
-  <!-- End scripts -->
+
 
 </body>
 

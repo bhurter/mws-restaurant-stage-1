@@ -10,17 +10,13 @@ window.initMap = () => {
       console.error(error);
     } else {
       let myMap = document.getElementById('map');
+      // only show map if online.  Else, show message that system is offline
       if (navigator.onLine) {
         self.map = new google.maps.Map(myMap, {
           zoom: 16,
           center: restaurant.latlng,
           scrollwheel: false
         });
-        /* self.map = new google.maps.Map(myMap, {
-          zoom: 16,
-          center: restaurant.latlng,
-          scrollwheel: false
-        }); */
         DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
 
         google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
@@ -28,7 +24,6 @@ window.initMap = () => {
         });
       } else {
         myMap.innerHTML = '<h2 class = "inside-offline-map" tabindex = "0"> Map is not available when offline </h2>';
-      /*  myMap.innerHTML = '<img id="offline-map" tabindex="0" src="/img/Offline.jpg" alt="Maps are not available while offline.  Maps copyright 2018 Google">';*/
       }
       fillBreadcrumb();
     }
@@ -78,6 +73,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.className = 'restaurant-img';
   image.tabIndex = 0;
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  // BH - add detailed image description for accessibility
   image.alt = restaurant.photo_description;
 
   const cuisine = document.getElementById('restaurant-cuisine');
