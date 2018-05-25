@@ -11,7 +11,7 @@ window.initMap = () => {
     } else {
       let myMap = document.getElementById('map');
       if (navigator.onLine) {
-        self.map = new google.maps.Map(document.getElementById('map'), {
+        self.map = new google.maps.Map(myMap, {
           zoom: 16,
           center: restaurant.latlng,
           scrollwheel: false
@@ -27,7 +27,7 @@ window.initMap = () => {
           document.querySelector('iframe').title = `Map of ${self.restaurant.name} and surrounding area`;
         });
       } else {
-        myMap.innerHTML = '<h2 class = "offline-map"> Map is not available when offline </h2>';
+        myMap.innerHTML = '<h2 class = "inside-offline-map" tabindex = "0"> Map is not available when offline </h2>';
       /*  myMap.innerHTML = '<img id="offline-map" tabindex="0" src="/img/Offline.jpg" alt="Maps are not available while offline.  Maps copyright 2018 Google">';*/
       }
       fillBreadcrumb();
